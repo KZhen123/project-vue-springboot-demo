@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.project.model.entity.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="mobilephone" jdbcType="VARCHAR" property="mobilephone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="uimage" jdbcType="VARCHAR" property="uimage" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="school" jdbcType="VARCHAR" property="school" />
+    <result column="faculty" jdbcType="VARCHAR" property="faculty" />
+    <result column="startime" jdbcType="VARCHAR" property="startime" />
+    <result column="userstatus" jdbcType="INTEGER" property="userstatus" />
+    <result column="createtime" jdbcType="DATE" property="createtime" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+    <result column="admin" jdbcType="INTEGER" property="admin" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, password, mobilephone, email, uimage, sex, school, faculty,
+    startime, userstatus, createtime, sign, admin
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.project.model.entity.User">
+    insert into user (id, username, password, 
+      mobilephone, email, uimage, 
+      sex, school, faculty, 
+      startime, userstatus, createtime, 
+      sign,admin)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{mobilephone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{uimage,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}, #{faculty,jdbcType=VARCHAR}, 
+      #{startime,jdbcType=VARCHAR}, #{userstatus,jdbcType=INTEGER}, #{createtime,jdbcType=DATE},
+      #{sign,jdbcType=VARCHAR},#{admin,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.project.model.entity.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      mobilephone = #{mobilephone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      uimage = #{uimage,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      faculty = #{faculty,jdbcType=VARCHAR},
+      startime = #{startime,jdbcType=VARCHAR},
+      userstatus = #{userstatus,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=DATE},
+      sign = #{sign,jdbcType=VARCHAR},
+      admin = #{admin,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+  </select>
+  <select id="getList" parameterType="com.project.model.dto.request.UserQuery" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    <if test="username!=null and username!=''">
+      where username like concat('%',#{username},'%')
+    </if>
+    <if test="row != null and row>=0 and size!=null and size>0">
+      limit #{row}, #{size}
+    </if>
+  </select>
+  <select id="getCount" parameterType="com.project.model.dto.request.UserQuery" resultType="java.lang.Long">
+    select
+    count(1)
+    from user
+    <if test="username!=null and username!=''">
+      and username like concat('%',#{username},'%')
+    </if>
+  </select>
+</mapper>
